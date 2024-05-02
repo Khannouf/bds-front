@@ -68,13 +68,6 @@ export default function ParticipantsTable(id: ActivitieId) {
     return createData(id, firstName, lastName, email, classe, filiere);
   });
 
-  console.log(rows);
-
-  const handleButtonClick = () => {
-    const selectedRowId = selectedRows[0];
-    console.log("ID de la ligne sélectionnée :", selectedRowId);
-  };
-
   return (
     <div style={{ height: 371, width: "100%" }}>
       <DataGrid
@@ -93,9 +86,6 @@ export default function ParticipantsTable(id: ActivitieId) {
           setSelectedRows(selection.map((id) => +id))
         }
       />
-      <button onClick={() => handleButtonClick()}>
-        Obtenir l'ID de la colonne sélectionnée
-      </button>
     </div>
   );
 }

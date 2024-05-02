@@ -1,5 +1,6 @@
 import {
   Alert,
+  Box,
   Button,
   Card,
   CardActions,
@@ -59,13 +60,12 @@ export default function EventCard(props: EventCardProps) {
   const { user, setUser } = useUserContext();
   //a passer en context
   const [token, setToken] = useState("");
-  const [participants, setParticipants] = useState([])
+  const [participants, setParticipants] = useState([]);
 
   const [open, setOpen] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
   const [openAllParticipant, setOpenAllParticipant] = useState(false);
   const [showAlert, setShowAlert] = useState("");
-
 
   const [alreadyRegisterVar, setAlreadyRegisterVar] = useState(false);
   const [passif, setPassif] = useState(false);
@@ -100,21 +100,21 @@ export default function EventCard(props: EventCardProps) {
 
   const handleClickOpenAllParticipant = () => {
     setOpenAllParticipant(true);
-    allParticipant()
+    allParticipant();
   };
 
   const handleClickCloseAllParticipant = () => {
     setOpenAllParticipant(false);
   };
 
-  const allParticipant = useCallback(async() => {
+  const allParticipant = useCallback(async () => {
     const allParticipantData = await fetch(
       `http://localhost:3000/activitie/participants/${props.activitie.id}`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       }
     )
@@ -123,9 +123,9 @@ export default function EventCard(props: EventCardProps) {
         throw new Error(error);
       });
     if (allParticipantData.type == "success") {
-      setParticipants(allParticipantData.data)
+      setParticipants(allParticipantData.data);
     }
-  }, [participants, props.activitie.id, token]);
+  }, [props.activitie.id, user?.token]);
 
   const alreadyRegister = useCallback(async () => {
     const alreadyRegisterVerif = await fetch(
@@ -192,72 +192,92 @@ export default function EventCard(props: EventCardProps) {
 
   return (
     <>
-      <Card sx={{ maxWidth: 345, borderRadius: "24px", boxShadow: 3 }}>
-        <CardMedia
+      <Card
+        sx={{
+          maxWidth: 345,
+          minWidth: 330,
+          minHeight: 430,
+          maxHeight: 500,
+          borderRadius: "24px",
+          boxShadow: 3,
+          backgroundImage: `url(${props.activitie.ImageActivitie[0]?.filename})`,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          display: "flex", // Make the card a flex container
+          flexDirection: "column-reverse", // Stack children vertically
+        }}
+      >
+        {/* <CardMedia
           sx={{ height: 140 }}
           image={props.activitie.ImageActivitie[0]?.filename}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {props.activitie.name}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={
-              {
-                // overflow: "hidden",
-                // textOverflow: "ellipsis"
-              }
-            }
-          >
-            {props.activitie.description}
-          </Typography>
-          <Timer dateDeb={props.activitie.dateDeb} />
-        </CardContent>
-        <CardActions
+        /> */}
+        <Box
           sx={{
-            justifyContent: "center",
-            alignItems: "center",
+            backdropFilter: "blur(10px)",
+            bgcolor: "rgba(182, 182, 182, 0.2);",
+            p: 1,
           }}
         >
-          <Button
-            size="medium"
-            variant="contained"
-            color="secondary"
-            sx={{ m: "1" }}
-            onClick={handleClickOpen}
-            disabled={passif}
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              {props.activitie.name}
+            </Typography>
+            {/* <Typography
+              variant="body2"
+              color="text.secondary"
+            >
+              {props.activitie.description}
+            </Typography> */}
+            {/* <Timer dateDeb={props.activitie.dateDeb} /> */}
+          </CardContent>
+          <CardActions
+            sx={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            Je m'inscris
-          </Button>
-          {user?.role == "admin" ? (
             <Button
-            size="medium"
-            variant="contained"
-            color="secondary"
-            sx={{ m: "1" }}
-            onClick={handleClickOpenAllParticipant}
-          >
-            Voir les participants
-          </Button>
-          ) : (
-            <>
-            </>
-          )}
-        </CardActions>
+              size="medium"
+              variant="contained"
+              color="secondary"
+              sx={{ mb: "1" }}
+              onClick={handleClickOpen}
+              disabled={passif}
+            >
+              Je m'inscris
+            </Button>
+            {user?.role == "admin" ? (
+              <Button
+                size="medium"
+                variant="contained"
+                color="secondary"
+                sx={{ m: "1" }}
+                onClick={handleClickOpenAllParticipant}
+              >
+                Voir les participants
+              </Button>
+            ) : (
+              <></>
+            )}
+          </CardActions>
+        </Box>
       </Card>
 
       {/* Boite de dialog de participants disponible seuleemnt par l'admin  */}
-      <Dialog open={openAllParticipant} onClose={handleClickCloseAllParticipant} maxWidth="xl">
+      <Dialog
+        open={openAllParticipant}
+        onClose={handleClickCloseAllParticipant}
+        maxWidth="xl"
+      >
         <DialogTitle>{props.activitie.name}</DialogTitle>
         <DialogContent>
-        {/* {participants.map((participant: Participant) => {
+          {/* {participants.map((participant: Participant) => {
                 console.log(participant.user.email);
                 
                 return <div>{participant.user.email}</div>;
               })} */}
-              <ParticipantsTable id={props.activitie.id}/>
+          <ParticipantsTable id={props.activitie.id} />
         </DialogContent>
       </Dialog>
 
@@ -282,6 +302,7 @@ export default function EventCard(props: EventCardProps) {
               Fin : <strong>{dateFin}</strong>
             </Typography>
           </DialogContentText>
+          <Timer dateDeb={props.activitie.dateDeb} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Fermer</Button>

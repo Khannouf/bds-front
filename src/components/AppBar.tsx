@@ -34,9 +34,9 @@ export default function MenuAppBar() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 2, height: 64 }}>
       <AppBar
-        position="static"
+        position="sticky"
         sx={{
           bgcolor: "background.default",
         }}
@@ -73,6 +73,7 @@ export default function MenuAppBar() {
               >
                 <AccountCircleIcon />
               </IconButton>
+              {user?.role == "admin" ? (
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}
@@ -88,12 +89,30 @@ export default function MenuAppBar() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                {user?.role == "admin"}
+                <MenuItem onClick={handleClose}>Profil</MenuItem>
                 <Link to={"/admin"} style={{ textDecoration: "none"}} color={"primary.main"}>
                   <MenuItem onClick={handleClose} sx={{color: "#000"}}>Admin</MenuItem>
                 </Link>
               </Menu>
+              ) : (
+                <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>Profil</MenuItem>
+              </Menu>
+              )}
             </>
           ) : (
             <>

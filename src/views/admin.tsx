@@ -7,6 +7,7 @@ import { CreateEventForm } from "../components/CreateEventForm";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import DateProviders from "../providers/localizationProvider";
 import UsersTable from "../components/tableUser";
+import UpdateEvent from "../components/UpdateEvent";
 import { useUserContext } from "../context/userContext";
 import { useEffect, useState } from "react";
 
@@ -49,6 +50,7 @@ export const Admin = () => {
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+    
   };
 
   return (
@@ -78,7 +80,7 @@ export const Admin = () => {
             <CreateEventForm />
           </CustomTabPanel>
           <CustomTabPanel value={value} index={3}>
-            Item 4
+            <UpdateEvent />
           </CustomTabPanel>
         </>
       ) : (

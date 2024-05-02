@@ -1,6 +1,7 @@
 import Router from "./routes/index.tsx";
 import Providers from "./providers";
 import MenuAppBar from "./components/AppBar.tsx";
+import { Box } from "@mui/material";
 
 // const router = createBrowserRouter([
 //   {
@@ -20,8 +21,8 @@ import MenuAppBar from "./components/AppBar.tsx";
 function App() {
   return (
     <Providers>
-      <MenuAppBar />
-      <Router />
+        <MenuAppBar />
+          <Router />
     </Providers>
   );
 }

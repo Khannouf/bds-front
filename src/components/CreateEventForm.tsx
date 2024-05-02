@@ -57,7 +57,7 @@ export const CreateEventForm = () => {
         method: "POST",
         headers: {
           //"Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
         body: formData,
       })
@@ -92,7 +92,7 @@ export const CreateEventForm = () => {
       <Box
         sx={{
           width: "100%",
-          height: "100%",
+          height: "100vh",
           display: "flex",
           justifyContent: "flex-start",
           alignItems: "center",
@@ -139,7 +139,6 @@ export const CreateEventForm = () => {
                   id="addresse"
                   name="addresse"
                   label="Addresse"
-                  //type="email"
                   fullWidth
                   variant="outlined"
                 />
